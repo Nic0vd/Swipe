@@ -1,0 +1,11 @@
+# Fichiers personnels de Xcode (fenêtres ouvertes, préférences de l'éditeur)
+xcuserdata/
+*.xcuserstate
+
+# Fichiers de compilation
+build/
+DerivedData/
+
+# Fichiers système et outils
+.DS_Store
+.claude/
