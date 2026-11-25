@@ -52,6 +52,11 @@ struct MenuContent: View {
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
+        // En tête du menu : le nom et la version (pratique pour vérifier une mise à jour).
+        Text("Swipe \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")")
+
+        Divider()
+
         Toggle("Activé", isOn: $isEnabled)
 
         Divider()
