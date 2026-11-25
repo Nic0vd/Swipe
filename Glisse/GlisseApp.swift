@@ -37,6 +37,8 @@ struct GlisseApp: App {
             SettingsView()
         }
         .windowResizability(.contentSize)
+        .defaultSize(SettingsView.windowSize)
+        .restorationBehavior(.disabled)     // ne pas reprendre une ancienne taille
         .defaultLaunchBehavior(.suppressed)
     }
 }
