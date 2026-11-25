@@ -34,6 +34,17 @@ enum SwipeDirection: String, CaseIterable {
     /// Pour changer de direction, il faut dépasser la frontière d'au moins 8°.
     static let stickyAngle: CGFloat = 8
 
+    // Entrée « franche » : près du point de départ, la direction est floue (la
+    // moindre dérive des doigts fait pencher le total). Pour ENTRER dans une
+    // diagonale ou dans ↓, il faut donc aller plus loin que le seuil normal.
+    // Sinon, en passant de → à ←, la fenêtre filait dans un coin, ou faisait
+    // mine de se réduire (choix de Nicolas, 25/11/2026).
+
+    /// Diagonales : 1,5 fois le seuil.
+    static let diagonalEntryFactor: CGFloat = 1.5
+    /// ↓ (réduire) : 1,6 fois le seuil.
+    static let downEntryFactor: CGFloat = 1.6
+
     /// Angle de la direction, en degrés (0 = droite, 90 = haut).
     var angle: CGFloat {
         switch self {
@@ -74,8 +85,9 @@ enum SwipeDirection: String, CaseIterable {
     /// `current` = la direction affichée jusqu'ici, pour l'« accroche ».
     static func from(dx: CGFloat, dy: CGFloat, threshold: CGFloat,
                      current: SwipeDirection? = nil) -> SwipeDirection? {
+        let distance = hypot(dx, dy)
         let needed = current == nil ? threshold : threshold * releaseRatio
-        guard hypot(dx, dy) >= needed else { return nil }
+        guard distance >= needed else { return nil }
 
         var degrees = atan2(dy, dx) * 180 / .pi
         if degrees < 0 { degrees += 360 }
@@ -90,6 +102,19 @@ enum SwipeDirection: String, CaseIterable {
             }
         }
 
+        // Nouvelle direction : diagonales et ↓ doivent être franches.
+        let candidate = direction(at: degrees)
+        if candidate.isDiagonal && distance < threshold * diagonalEntryFactor {
+            return current
+        }
+        if candidate == .down && distance < threshold * downEntryFactor {
+            return current
+        }
+        return candidate
+    }
+
+    /// La part du cercle (8 parts) où tombe un angle en degrés.
+    private static func direction(at degrees: CGFloat) -> SwipeDirection {
         // Proche d'un axe droit ? Alors c'est une direction droite.
         let axes: [(CGFloat, SwipeDirection)] = [(0, .right), (90, .up), (180, .left), (270, .down), (360, .right)]
         for (axis, direction) in axes where abs(degrees - axis) <= straightHalfAngle {

@@ -12,6 +12,7 @@ Range tes fenêtres macOS avec un **swipe à deux doigts sur la barre de titre**
 | ↑ | remplir l'écran (sans plein écran macOS) |
 | ↖ ↗ ↙ ↘ | quart d'écran |
 | ↓ | réduire dans le Dock |
+| pincer (deux doigts qui se rapprochent, comme pour dézoomer) | fermer la fenêtre |
 | deux doigts posés un instant, puis ↑ | plein écran macOS (le même geste pour en sortir) |
 
 Pendant le geste, la fenêtre se déplace en direct, et une petite vignette près du curseur montre où elle va. On peut changer d'avis tant que les doigts sont posés, ou revenir au point de départ pour annuler. Partout ailleurs que sur une barre de titre, le défilement marche normalement.

@@ -4,6 +4,7 @@
 //
 //  Le gros bouton rond affiché au centre de la fenêtre pendant un swipe
 //  qui ne la range pas dans une zone :
+//    - rouge avec « × » : la fenêtre va être fermée ;
 //    - jaune avec « − » : la fenêtre va être réduite dans le Dock ;
 //    - vert avec les flèches : elle va entrer en plein écran macOS (ou en sortir).
 //  Mêmes couleurs que les boutons ronds en haut à gauche des fenêtres.
@@ -14,6 +15,7 @@ import SwiftUI
 
 /// Quel bouton afficher.
 enum BadgeKind: Equatable {
+    case close
     case minimize
     case enterFullScreen
     case exitFullScreen
@@ -74,6 +76,8 @@ struct ActionBadgeView: View {
 
     private var color: Color {
         switch model.kind {
+        case .close:
+            return Color(red: 1.0, green: 0.373, blue: 0.341)     // rouge macOS
         case .minimize:
             return Color(red: 0.996, green: 0.737, blue: 0.180)   // jaune macOS
         case .enterFullScreen, .exitFullScreen:
@@ -83,6 +87,7 @@ struct ActionBadgeView: View {
 
     private var symbol: String {
         switch model.kind {
+        case .close:           return "xmark"
         case .minimize:        return "minus"
         case .enterFullScreen: return "arrow.up.left.and.arrow.down.right"
         case .exitFullScreen:  return "arrow.down.right.and.arrow.up.left"

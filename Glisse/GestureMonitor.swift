@@ -42,7 +42,7 @@ final class GestureMonitor {
     /// Mode direct : temps d'attente avant de déplacer la vraie fenêtre.
     /// Si la direction change encore pendant ce temps (doigts qui tournent),
     /// on attend : la fenêtre ne court pas après chaque direction.
-    static let liveDelay: TimeInterval = 0.08
+    static let liveDelay: TimeInterval = 0.05
 
     /// Appui prolongé : temps (en secondes) pendant lequel les deux doigts
     /// doivent rester posés sans bouger avant le swipe. Ensuite, ↑ = plein écran.
@@ -54,6 +54,18 @@ final class GestureMonitor {
     /// retrouver au-dessus d'une autre fenêtre, qu'on ne veut pas toucher.
     static let followUpDelay: TimeInterval = 1.5
     static let followUpCursorTolerance: CGFloat = 3
+
+    /// Fermer : pincer avec deux doigts sur la barre de titre, comme pour
+    /// dézoomer. macOS mesure le pincement en « zoom » : 0 au début, négatif
+    /// quand les doigts se rapprochent. Au-delà de −0,25, la fenêtre sera
+    /// fermée au lâcher.
+    static let pinchCloseThreshold: CGFloat = 0.25
+
+    /// Types d'événements « geste » du trackpad (pincement, rotation…).
+    private static let gestureEventTypes: Set<UInt32> = [
+        UInt32(NSEvent.EventType.gesture.rawValue),
+        UInt32(NSEvent.EventType.magnify.rawValue),
+    ]
 
     private var tap: CFMachPort?
 
@@ -72,7 +84,7 @@ final class GestureMonitor {
     private var originalAXFrame: CGRect?     // la même, en coordonnées AX (pour l'y ramener)
     private var windowIsFullScreen = false   // la fenêtre est en plein écran macOS
     private var heldBeforeSwipe = false      // appui prolongé avant de bouger
-    private var previewActive = false        // l'aperçu est apparu pendant ce geste
+    private var previewActive = false       // l'aperçu est apparu pendant ce geste
     private var cursor: CGPoint = .zero      // position du curseur (pour le mini-aperçu)
     private var mode: PreviewMode = PreviewMode.defaultMode   // réglage choisi par l'utilisateur
     private var threshold: CGFloat = 80      // sensibilité, relue au début de chaque geste
@@ -81,6 +93,12 @@ final class GestureMonitor {
     private var lastDirection: SwipeDirection?
     private var swallowingMomentum = false   // on avale l'inertie du geste capté
     private var pendingLiveMove: DispatchWorkItem?   // déplacement en direct en attente
+
+    // État du pincement capté en cours
+    private var pinchWindow: AXUIElement?    // la fenêtre à fermer
+    private var pinchFrame: CGRect?          // sa place (coordonnées NSScreen), pour le bouton rouge
+    private var pinchTotal: CGFloat = 0      // zoom cumulé (négatif = doigts qui se rapprochent)
+    private var pinchArmed = false           // seuil dépassé : la fenêtre sera fermée au lâcher
 
     init() {
         start()
@@ -93,7 +111,11 @@ final class GestureMonitor {
     func start() {
         guard tap == nil else { return }
 
-        let mask = CGEventMask(1) << CGEventType.scrollWheel.rawValue
+        // On écoute les défilements (swipes) et les gestes (pincements).
+        var mask = CGEventMask(1) << CGEventType.scrollWheel.rawValue
+        for type in Self.gestureEventTypes {
+            mask |= CGEventMask(1) << CGEventMask(type)
+        }
         let me = Unmanaged.passUnretained(self).toOpaque()
         guard let tap = CGEvent.tapCreate(tap: .cgSessionEventTap,
                                           place: .headInsertEventTap,
@@ -136,6 +158,11 @@ final class GestureMonitor {
             if let tap { CGEvent.tapEnable(tap: tap, enable: true) }
             log("écoute coupée par macOS, rallumée")
             return passThrough
+        }
+
+        // Pincement (et autres gestes du trackpad) : traité à part.
+        if Self.gestureEventTypes.contains(type.rawValue) {
+            return handlePinch(event)
         }
 
         // On ne garde que les défilements « continus », c'est-à-dire ceux du
@@ -197,28 +224,8 @@ final class GestureMonitor {
     private func beginGesture(at location: CGPoint, heldFor held: TimeInterval) {
         resetGesture()
 
-        let enabled = UserDefaults.standard.object(forKey: "enabled") as? Bool ?? true
-        guard enabled else { return }
-
-        let now = ProcessInfo.processInfo.systemUptime
+        guard let (window, origin) = chooseWindow(at: location) else { return }
         let mouse = NSEvent.mouseLocation   // coordonnées NSScreen
-
-        // Quelle fenêtre ? D'abord : est-ce la suite du geste précédent ?
-        let window: AXUIElement
-        let origin: String
-        if let last = lastCapture,
-           now - last.time < Self.followUpDelay,
-           hypot(mouse.x - last.cursor.x, mouse.y - last.cursor.y) <= Self.followUpCursorTolerance,
-           WindowManager.frame(of: last.window) != nil {
-            window = last.window
-            origin = "suite du geste précédent, même fenêtre"
-        } else if let hit = TitleBarDetector.hit(at: location), hit.isOnTitleBar {
-            window = hit.window
-            origin = "barre de titre de \(hit.appName)"
-        } else {
-            lastCapture = nil
-            return
-        }
 
         isCapturing = true
         targetWindow = window
@@ -238,6 +245,94 @@ final class GestureMonitor {
         if heldBeforeSwipe { details += " → appui prolongé (↑ = plein écran)" }
         if windowIsFullScreen { details += ", fenêtre en plein écran" }
         log("geste capté : \(origin)  (\(details))")
+    }
+
+    /// Quelle fenêtre vise ce geste ? La même que le geste précédent s'il
+    /// enchaîne (curseur immobile, moins de 1,5 s), sinon celle dont la barre
+    /// de titre est sous le curseur. `nil` : le geste ne concerne pas Swipe.
+    private func chooseWindow(at location: CGPoint) -> (AXUIElement, String)? {
+        let enabled = UserDefaults.standard.object(forKey: "enabled") as? Bool ?? true
+        guard enabled else { return nil }
+
+        let now = ProcessInfo.processInfo.systemUptime
+        let mouse = NSEvent.mouseLocation   // coordonnées NSScreen
+
+        if let last = lastCapture,
+           now - last.time < Self.followUpDelay,
+           hypot(mouse.x - last.cursor.x, mouse.y - last.cursor.y) <= Self.followUpCursorTolerance,
+           WindowManager.frame(of: last.window) != nil {
+            return (last.window, "suite du geste précédent, même fenêtre")
+        }
+        if let hit = TitleBarDetector.hit(at: location), hit.isOnTitleBar {
+            return (hit.window, "barre de titre de \(hit.appName)")
+        }
+        lastCapture = nil
+        return nil
+    }
+
+    // MARK: - Pincement (fermer la fenêtre)
+
+    /// Pincement sur une barre de titre : bouton rouge dès que le seuil est
+    /// dépassé, fermeture au lâcher. Ailleurs, le pincement marche normalement
+    /// (zoom dans Safari, Plans…).
+    private func handlePinch(_ event: CGEvent) -> Unmanaged<CGEvent>? {
+        let passThrough = Unmanaged.passUnretained(event)
+        guard let ns = NSEvent(cgEvent: event), ns.type == .magnify else {
+            // Autres gestes (rotation…) : avalés seulement pendant un pincement capté.
+            return pinchWindow == nil ? passThrough : nil
+        }
+
+        if ns.phase.contains(.began) {
+            beginPinch(at: event.location)
+            return pinchWindow == nil ? passThrough : nil
+        }
+        guard let window = pinchWindow else { return passThrough }
+
+        if ns.phase.contains(.changed) {
+            pinchTotal += ns.magnification
+            let armed = pinchTotal <= -Self.pinchCloseThreshold
+            if armed != pinchArmed {
+                pinchArmed = armed
+                if armed, let frame = pinchFrame {
+                    ActionBadge.shared.show(.close, centeredOn: frame)
+                } else {
+                    ActionBadge.shared.hide()
+                }
+                log("   pincement \(String(format: "%.2f", pinchTotal)) : \(armed ? "la fenêtre sera fermée" : "rien")")
+            }
+        } else if ns.phase.contains(.ended) {
+            let close = pinchArmed
+            log("   pincement relâché à \(String(format: "%.2f", pinchTotal)) : \(close ? "fermeture" : "rien")")
+            resetPinch()
+            if close {
+                lastCapture = nil
+                DispatchQueue.main.async {
+                    WindowManager.close(window)
+                }
+            }
+        } else if ns.phase.contains(.cancelled) {
+            resetPinch()
+        }
+        return nil
+    }
+
+    private func beginPinch(at location: CGPoint) {
+        resetPinch()
+        guard let (window, origin) = chooseWindow(at: location) else { return }
+        pinchWindow = window
+        if let axFrame = WindowManager.frame(of: window),
+           let primaryHeight = NSScreen.screens.first?.frame.height {
+            pinchFrame = ZoneCalculator.flipped(axFrame, primaryHeight: primaryHeight)
+        }
+        log("pincement capté : \(origin)")
+    }
+
+    private func resetPinch() {
+        if pinchArmed { ActionBadge.shared.hide() }
+        pinchWindow = nil
+        pinchFrame = nil
+        pinchTotal = 0
+        pinchArmed = false
     }
 
     private func updateGesture(with event: NSEvent) {

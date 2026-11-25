@@ -2,70 +2,67 @@
 //  WindowAnimator.swift
 //  Glisse
 //
-//  Fait glisser et redimensionner une fenêtre en douceur, de sa place
-//  actuelle jusqu'à sa zone cible, au lieu de la téléporter.
+//  Fait glisser et redimensionner une fenêtre en douceur jusqu'à sa cible.
 //
-//  Principe : environ 120 fois par seconde, on calcule où la fenêtre
-//  devrait être à cet instant et on la place là. Le mouvement ralentit
-//  en fin de course (« ease-out »), ce qui paraît plus naturel.
-//
-//  Si la cible change en cours de route (swipe en direct), la nouvelle
-//  animation repart de là où la fenêtre se trouve vraiment : pas de saut.
+//  Principe : la fenêtre est tirée vers sa cible par un « ressort » amorti
+//  (sans rebond). À chaque rafraîchissement de l'écran, on calcule la
+//  nouvelle position et la nouvelle vitesse, et on place la fenêtre.
+//  Avantages par rapport à une courbe à durée fixe :
+//    - si la cible change en route (swipe en direct), la fenêtre garde son
+//      élan et s'infléchit en douceur, sans cassure ;
+//    - le mouvement est calé sur l'écran (display link), donc sans à-coups.
 //
 
+import AppKit
 import ApplicationServices
-import Foundation
+import QuartzCore
 
-final class WindowAnimator {
+final class WindowAnimator: NSObject {
 
-    /// Durée de l'animation, en secondes. 0 = placement instantané.
-    static let duration: TimeInterval = 0.15
+    /// Raideur du ressort. Plus grand = plus rapide. Avec 32, la fenêtre fait
+    /// 95 % du chemin en 0,15 s (comme l'ancienne animation validée par Nicolas),
+    /// puis se pose en douceur.
+    static let stiffness: CGFloat = 32
 
     /// Temps maximum accordé à une app pour répondre, en secondes.
     /// Au-delà, on n'attend pas : une app lente ne doit pas bloquer Swipe.
     private static let appTimeout: Float = 0.25
+
+    /// Sécurité : une animation ne dure jamais plus d'une seconde.
+    private static let maxDuration: CFTimeInterval = 1
 
     /// L'animation en cours, s'il y en a une (une seule à la fois).
     private static var current: WindowAnimator?
 
     private let window: AXUIElement
     private let app: AXUIElement
-    private let start: CGRect
-    private let target: CGRect
-    private let startTime = ProcessInfo.processInfo.systemUptime
-    private var timer: Timer?
-    private var lastApplied: CGRect       // dernière position donnée à la fenêtre
+    private var target: CGRect
+    private var spring: SpringRect
+    private var lastApplied: CGRect          // dernière position donnée à la fenêtre
+    private var lastTime: CFTimeInterval?
+    private var startTime = CACurrentMediaTime()
+    private var displayLink: CADisplayLink?
     private var restoreEnhancedUI = false
 
     // MARK: - Utilisation
 
-    /// Anime `window` de `start` à `target` (coordonnées AX, origine en haut à gauche).
+    /// Amène `window` de `start` à `target` (coordonnées AX, origine en haut à gauche).
+    /// Si la fenêtre est déjà en mouvement, elle garde son élan et change de cible.
     static func animate(_ window: AXUIElement, from start: CGRect, to target: CGRect) {
-        var start = start
-        var enhancedUIWasOn = false
-
         if let running = current {
             if CFEqual(running.window, window) {
-                // Même fenêtre, nouvelle cible : on repart de là où elle est.
-                start = running.lastApplied
-                enhancedUIWasOn = running.restoreEnhancedUI
-                running.cancel(keepEnhancedUIOff: true)
-            } else {
-                running.finish()
+                running.retarget(to: target)
+                return
             }
+            running.finish()
         }
-
-        guard duration > 0, start != target else {
+        guard start != target else {
             WindowManager.setFrame(target, of: window)
-            if enhancedUIWasOn {
-                setEnhancedUI(true, on: appElement(of: window))
-            }
             return
         }
-
         let animator = WindowAnimator(window: window, start: start, target: target)
         current = animator
-        animator.begin(enhancedUIWasOn: enhancedUIWasOn)
+        animator.begin()
     }
 
     /// Termine tout de suite l'animation en cours (la fenêtre saute à sa place finale).
@@ -77,64 +74,83 @@ final class WindowAnimator {
 
     private init(window: AXUIElement, start: CGRect, target: CGRect) {
         self.window = window
-        self.start = start
         self.target = target
+        self.spring = SpringRect(start: start)
         self.lastApplied = start
-        self.app = Self.appElement(of: window)
+        var pid: pid_t = 0
+        AXUIElementGetPid(window, &pid)
+        self.app = AXUIElementCreateApplication(pid)
+        super.init()
         AXUIElementSetMessagingTimeout(window, Self.appTimeout)
         AXUIElementSetMessagingTimeout(app, Self.appTimeout)
     }
 
-    private func begin(enhancedUIWasOn: Bool) {
+    private func begin() {
         // Certaines apps (Chrome, Electron…) animent elles-mêmes chaque
         // changement quand « AXEnhancedUserInterface » est actif, ce qui rend
         // le mouvement saccadé. On le coupe pendant l'animation, puis on le remet.
-        if enhancedUIWasOn {
-            restoreEnhancedUI = true      // déjà coupé par l'animation précédente
-        } else if boolAttribute("AXEnhancedUserInterface", of: app) {
-            Self.setEnhancedUI(false, on: app)
+        if boolAttribute("AXEnhancedUserInterface", of: app) {
+            setEnhancedUI(false)
             restoreEnhancedUI = true
         }
 
-        let timer = Timer(timeInterval: 1.0 / 120.0, repeats: true) { [weak self] _ in
-            MainActor.assumeIsolated {
-                self?.tick()
-            }
+        // Une image à chaque rafraîchissement de l'écran.
+        let screen = NSScreen.main ?? NSScreen.screens.first
+        if let link = screen?.displayLink(target: self, selector: #selector(step(_:))) {
+            link.add(to: .main, forMode: .common)   // continue même pendant qu'un menu est ouvert
+            displayLink = link
+        } else {
+            finish()
         }
-        // Mode « common » : l'animation continue même pendant qu'un menu est ouvert.
-        RunLoop.main.add(timer, forMode: .common)
-        self.timer = timer
-        tick()
     }
 
-    private func tick() {
-        let elapsed = ProcessInfo.processInfo.systemUptime - startTime
-        let progress = min(1, elapsed / Self.duration)
-        if progress >= 1 {
+    /// Nouvelle cible en route : on garde la position et la vitesse actuelles.
+    private func retarget(to newTarget: CGRect) {
+        target = newTarget
+        startTime = CACurrentMediaTime()
+    }
+
+    @objc private func step(_ link: CADisplayLink) {
+        let now = link.targetTimestamp
+        let dt = min(max(now - (lastTime ?? now - 1.0 / 60.0), 0), 1.0 / 30.0)
+        lastTime = now
+
+        spring.advance(toward: target, stiffness: Self.stiffness, dt: CGFloat(dt))
+
+        if spring.isSettled(on: target) || CACurrentMediaTime() - startTime > Self.maxDuration {
             finish()
             return
         }
-        // Ease-out cubique : rapide au début, ralentit à l'arrivée.
-        let eased = 1 - pow(1 - progress, 3)
-        let frame = CGRect(
-            x: start.minX + (target.minX - start.minX) * eased,
-            y: start.minY + (target.minY - start.minY) * eased,
-            width: start.width + (target.width - start.width) * eased,
-            height: start.height + (target.height - start.height) * eased
-        ).integral
-        WindowManager.setPosition(frame.origin, of: window)
-        WindowManager.setSize(frame.size, of: window)
+        apply(spring.rounded)
+    }
+
+    /// Envoie à la fenêtre seulement ce qui a changé, dans le bon ordre :
+    /// - fenêtre qui rétrécit : la taille d'abord (sinon le bord opposé tremble) ;
+    /// - fenêtre qui grandit : la position d'abord (sinon elle déborde un instant).
+    private func apply(_ frame: CGRect) {
+        let moved = frame.origin != lastApplied.origin
+        let resized = frame.size != lastApplied.size
+        guard moved || resized else { return }
+
+        let shrinking = frame.width < lastApplied.width || frame.height < lastApplied.height
+        if shrinking {
+            if resized { WindowManager.setSize(frame.size, of: window) }
+            if moved { WindowManager.setPosition(frame.origin, of: window) }
+        } else {
+            if moved { WindowManager.setPosition(frame.origin, of: window) }
+            if resized { WindowManager.setSize(frame.size, of: window) }
+        }
         lastApplied = frame
     }
 
-    /// Fin normale : la fenêtre est placée exactement sur sa cible.
+    /// Fin : la fenêtre est placée exactement sur sa cible.
     private func finish() {
-        timer?.invalidate()
-        timer = nil
+        displayLink?.invalidate()
+        displayLink = nil
         WindowManager.setFrame(target, of: window)
         lastApplied = target
         if restoreEnhancedUI {
-            Self.setEnhancedUI(true, on: app)
+            setEnhancedUI(true)
             restoreEnhancedUI = false
         }
         if Self.current === self {
@@ -142,28 +158,9 @@ final class WindowAnimator {
         }
     }
 
-    /// Arrêt en route, sans placer la fenêtre sur la cible.
-    private func cancel(keepEnhancedUIOff: Bool) {
-        timer?.invalidate()
-        timer = nil
-        if restoreEnhancedUI && !keepEnhancedUIOff {
-            Self.setEnhancedUI(true, on: app)
-        }
-        restoreEnhancedUI = false
-        if Self.current === self {
-            Self.current = nil
-        }
-    }
-
     // MARK: - Petits outils
 
-    private static func appElement(of window: AXUIElement) -> AXUIElement {
-        var pid: pid_t = 0
-        AXUIElementGetPid(window, &pid)
-        return AXUIElementCreateApplication(pid)
-    }
-
-    private static func setEnhancedUI(_ on: Bool, on app: AXUIElement) {
+    private func setEnhancedUI(_ on: Bool) {
         AXUIElementSetAttributeValue(app, "AXEnhancedUserInterface" as CFString,
                                      on ? kCFBooleanTrue : kCFBooleanFalse)
     }
@@ -174,5 +171,48 @@ final class WindowAnimator {
             return false
         }
         return (value as? Bool) ?? false
+    }
+}
+
+// MARK: - Le ressort
+
+/// Un rectangle tiré vers une cible par quatre ressorts amortis sans rebond
+/// (« amortissement critique ») : un pour x, y, la largeur et la hauteur.
+/// Calcul exact, donc stable même si une image arrive en retard.
+struct SpringRect {
+    private(set) var value: [CGFloat]          // x, y, largeur, hauteur
+    private(set) var velocity: [CGFloat] = [0, 0, 0, 0]
+
+    init(start: CGRect) {
+        value = [start.minX, start.minY, start.width, start.height]
+    }
+
+    var rect: CGRect { CGRect(x: value[0], y: value[1], width: value[2], height: value[3]) }
+
+    /// Position arrondie au point près, sans grossir la fenêtre.
+    var rounded: CGRect {
+        CGRect(x: value[0].rounded(), y: value[1].rounded(),
+               width: value[2].rounded(), height: value[3].rounded())
+    }
+
+    mutating func advance(toward target: CGRect, stiffness omega: CGFloat, dt: CGFloat) {
+        let goal = [target.minX, target.minY, target.width, target.height]
+        let decay = exp(-omega * dt)
+        for i in 0..<4 {
+            let offset = value[i] - goal[i]
+            let temp = (velocity[i] + omega * offset) * dt
+            value[i] = goal[i] + (offset + temp) * decay
+            velocity[i] = (velocity[i] - omega * temp) * decay
+        }
+    }
+
+    /// Arrivé : à moins d'un point de la cible et presque immobile
+    /// (le reste du mouvement serait invisible).
+    func isSettled(on target: CGRect) -> Bool {
+        let goal = [target.minX, target.minY, target.width, target.height]
+        for i in 0..<4 where abs(value[i] - goal[i]) > 1 || abs(velocity[i]) > 30 {
+            return false
+        }
+        return true
     }
 }

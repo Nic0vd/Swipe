@@ -134,6 +134,17 @@ enum WindowManager {
         return result == .success && settable.boolValue
     }
 
+    /// Ferme la fenêtre, comme un clic sur son bouton rouge. L'app reste
+    /// ouverte, et elle peut proposer d'enregistrer un document modifié.
+    static func close(_ window: AXUIElement) {
+        guard let button = element(kAXCloseButtonAttribute, of: window) else {
+            log("cette fenêtre n'a pas de bouton de fermeture")
+            return
+        }
+        let result = AXUIElementPerformAction(button, kAXPressAction as CFString)
+        log(result == .success ? "fenêtre fermée" : "impossible de fermer (\(result.rawValue))")
+    }
+
     /// Fait entrer la fenêtre en plein écran macOS, ou l'en fait sortir.
     static func toggleFullScreen(_ window: AXUIElement) {
         let goingFull = !isFullScreen(window)
