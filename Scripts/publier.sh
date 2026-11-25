@@ -49,7 +49,8 @@ ditto --norsrc --noextattr --noqtn "$APP" "$WORK/Swipe.app"
 APP="$WORK/Swipe.app"
 
 codesign --verify --deep --strict "$APP" || fail "La signature de l'app est invalide."
-codesign -dv "$APP" 2>&1 | grep -q "TeamIdentifier=$TEAM" \
+SIGN_INFO=$(codesign -dv "$APP" 2>&1)   # lu d'abord en entier (grep -q + pipefail = faux échec)
+[[ "$SIGN_INFO" == *"TeamIdentifier=$TEAM"* ]] \
   || fail "L'app n'est pas signée avec ta Personal Team ($TEAM). Les mises à jour seraient refusées."
 
 gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1 \
