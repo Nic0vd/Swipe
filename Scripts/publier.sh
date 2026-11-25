@@ -40,6 +40,14 @@ TAG="v$VERSION"
 
 echo "▶︎ Swipe $VERSION (build $BUILD), macOS $MIN_OS minimum"
 
+# Copie de travail hors du dossier Documents : iCloud Drive y colle des
+# attributs invisibles (FinderInfo, fileprovider) que la vérification stricte
+# de la signature refuse. On les retire en copiant.
+WORK=$(mktemp -d)
+trap 'rm -rf "$WORK"' EXIT
+ditto --norsrc --noextattr --noqtn "$APP" "$WORK/Swipe.app"
+APP="$WORK/Swipe.app"
+
 codesign --verify --deep --strict "$APP" || fail "La signature de l'app est invalide."
 codesign -dv "$APP" 2>&1 | grep -q "TeamIdentifier=$TEAM" \
   || fail "L'app n'est pas signée avec ta Personal Team ($TEAM). Les mises à jour seraient refusées."
@@ -55,14 +63,13 @@ SPARKLE_BIN=$(ls -d "$HOME"/Library/Developer/Xcode/DerivedData/Glisse-*/SourceP
 [ -x "$SPARKLE_BIN/sign_update" ] || fail "Outils Sparkle introuvables : ouvre le projet dans Xcode et compile-le une fois."
 
 # --- 2. Le DMG ----------------------------------------------------------------
-STAGE=build/dmg
+STAGE="$WORK/dmg"
 DMG="build/Swipe-$VERSION.dmg"
-rm -rf "$STAGE" "$DMG"
+rm -f "$DMG"
 mkdir -p "$STAGE"
-ditto "$APP" "$STAGE/Swipe.app"            # renommée Swipe.app (la signature reste valide)
+ditto --norsrc --noextattr "$APP" "$STAGE/Swipe.app"   # nommée Swipe.app (la signature reste valide)
 ln -s /Applications "$STAGE/Applications"
 hdiutil create -quiet -volname "Swipe $VERSION" -srcfolder "$STAGE" -ov -format UDZO "$DMG"
-rm -rf "$STAGE"
 echo "✓ DMG : $DMG"
 
 # --- 3. Signature Sparkle -----------------------------------------------------
