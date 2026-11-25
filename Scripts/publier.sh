@@ -15,14 +15,16 @@
 #     enregistrer dans le dossier  build/export  du projet ;
 #   - avoir tout enregistré dans Git et envoyé sur GitHub (git push).
 #
-# Utilisation :  Scripts/publier.sh "Ce qui change dans cette version"
+# Utilisation :  Scripts/publier.sh "Ce qui change (français)" "What's new (English)"
+# (sans texte anglais, le français est repris tel quel)
 #
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 REPO="Nic0vd/Swipe"
 TEAM="X3GBSP2626"
-NOTES="${1:-}"
+NOTES_FR="${1:-}"
+NOTES_EN="${2:-}"
 
 fail() { echo "❌ $1" >&2; exit 1; }
 
@@ -36,7 +38,8 @@ VERSION=$(plist CFBundleShortVersionString)
 BUILD=$(plist CFBundleVersion)
 MIN_OS=$(plist LSMinimumSystemVersion)
 TAG="v$VERSION"
-[ -n "$NOTES" ] || NOTES="Swipe $VERSION"
+[ -n "$NOTES_FR" ] || NOTES_FR="Swipe $VERSION"
+[ -n "$NOTES_EN" ] || NOTES_EN="$NOTES_FR"
 
 echo "▶︎ Swipe $VERSION (build $BUILD), macOS $MIN_OS minimum"
 
@@ -80,7 +83,8 @@ echo "✓ DMG signé pour Sparkle"
 # --- 4. L'annonce de mise à jour (appcast.xml) --------------------------------
 URL="https://github.com/$REPO/releases/download/$TAG/Swipe-$VERSION.dmg"
 DATE=$(LC_ALL=C date -u "+%a, %d %b %Y %H:%M:%S +0000")
-NOTES_HTML=$(printf '%s' "$NOTES" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')
+html() { printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'; }
+NOTES_HTML="<p>🇬🇧 $(html "$NOTES_EN")</p><p>🇫🇷 $(html "$NOTES_FR")</p>"
 cat > build/appcast.xml <<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
@@ -92,7 +96,7 @@ cat > build/appcast.xml <<EOF
       <sparkle:version>$BUILD</sparkle:version>
       <sparkle:shortVersionString>$VERSION</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>$MIN_OS</sparkle:minimumSystemVersion>
-      <description><![CDATA[<p>$NOTES_HTML</p>]]></description>
+      <description><![CDATA[$NOTES_HTML]]></description>
       <enclosure url="$URL" type="application/octet-stream" $SIGNATURE />
     </item>
   </channel>
@@ -102,6 +106,6 @@ echo "✓ Annonce : build/appcast.xml"
 
 # --- 5. Publication sur GitHub ------------------------------------------------
 gh release create "$TAG" "$DMG" build/appcast.xml \
-  --repo "$REPO" --title "Swipe $VERSION" --notes "$NOTES"
+  --repo "$REPO" --title "Swipe $VERSION" --notes "$(printf '🇬🇧 %s\n\n🇫🇷 %s' "$NOTES_EN" "$NOTES_FR")"
 echo "✓ Publié : https://github.com/$REPO/releases/tag/$TAG"
 echo "  Les Swipe déjà installés verront la mise à jour à leur prochaine vérification."

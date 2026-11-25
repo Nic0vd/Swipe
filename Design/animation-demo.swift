@@ -25,10 +25,28 @@ func drawCaption(_ text: String, alpha: CGFloat) {
     NSAttributedString(string: text, attributes: attrs).draw(in: CGRect(x: 0, y: 552, width: W, height: 34))
 }
 
+/// Traduit une légende avec le catalogue de l'app (Glisse/Localizable.xcstrings).
+/// Sans langue demandée, ou sans traduction, on garde le français.
+func translator(catalog path: String?, language: String?) -> (String) -> String {
+    guard let path, let language,
+          let data = FileManager.default.contents(atPath: path),
+          let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let strings = json["strings"] as? [String: Any] else { return { $0 } }
+    return { key in
+        let entry = strings[key] as? [String: Any]
+        let loc = (entry?["localizations"] as? [String: Any])?[language] as? [String: Any]
+        let unit = loc?["stringUnit"] as? [String: Any]
+        return unit?["value"] as? String ?? key
+    }
+}
+
 @main
 struct FabriqueDemo {
     static func main() {
-        let out = CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "."
+        // Arguments : <dossier des images> [langue] [catalogue de traductions]
+        let args = CommandLine.arguments
+        let out = args.count > 1 ? args[1] : "."
+        let tr = translator(catalog: args.count > 3 ? args[3] : nil, language: args.count > 2 ? args[2] : nil)
         var index = 0
         let perGesture = Int(GestureDemo.duration * fps)
         for g in GestureDemo.all {
@@ -51,7 +69,7 @@ struct FabriqueDemo {
                 GestureDemo.draw(g, at: t, in: cg)
                 cg.restoreGState()
                 let fade = min(GestureDemo.clamp(t / 0.25), 1 - GestureDemo.clamp((t - (GestureDemo.duration - 0.35)) / 0.35))
-                drawCaption("\(g.symbol)  ·  \(g.title)", alpha: CGFloat(0.6 + 0.4 * fade))
+                drawCaption("\(tr(g.symbol))  ·  \(tr(g.title))", alpha: CGFloat(0.6 + 0.4 * fade))
                 NSGraphicsContext.restoreGraphicsState()
                 try! rep.representation(using: .png, properties: [:])!
                     .write(to: URL(fileURLWithPath: String(format: "%@/f%04d.png", out, index)))
