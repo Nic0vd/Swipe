@@ -27,7 +27,8 @@ NOTES="${1:-}"
 fail() { echo "❌ $1" >&2; exit 1; }
 
 # --- 1. L'app exportée par Xcode -------------------------------------------
-APP=$(find build/export -maxdepth 3 -name "*.app" -type d 2>/dev/null | head -1)
+# (Xcode crée un sous-dossier daté à chaque export : on prend le plus récent.)
+APP=$(ls -td build/export/*.app build/export/*/*.app 2>/dev/null | head -1 || true)
 [ -n "$APP" ] || fail "Aucune app dans build/export. Dans Xcode : Product → Archive → Distribute App → Custom → Copy App, vers le dossier build/export du projet."
 
 plist() { /usr/libexec/PlistBuddy -c "Print :$1" "$APP/Contents/Info.plist"; }
