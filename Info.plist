@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Réglages de Sparkle (mises à jour automatiques). Xcode ajoute lui-même
+  tout le reste (nom, version…) à partir des réglages du projet.
+  Ce fichier est à la racine, hors du dossier Glisse/, pour ne pas être
+  copié dans l'app comme une simple ressource.
+-->
+<plist version="1.0">
+<dict>
+	<!-- Où Swipe va chercher l'annonce de la dernière version -->
+	<key>SUFeedURL</key>
+	<string>https://github.com/Nic0vd/Swipe/releases/latest/download/appcast.xml</string>
+	<!-- Clé publique : Swipe n'installe que des mises à jour signées avec la clé privée de Nicolas -->
+	<key>SUPublicEDKey</key>
+	<string>fezAhEbMLm90ltvxR17RZPBbCwYpm++ijbvTpIokOfg=</string>
+	<!-- Vérification automatique activée d'office, une fois par jour -->
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
+</dict>
+</plist>

@@ -22,6 +22,8 @@ struct GlisseApp: App {
         // « Lancer au démarrage » coché par défaut (une seule fois,
         // et seulement pour la version placée dans Applications).
         LaunchAtLogin.applyDefaultOnFirstLaunch()
+        // Démarre Sparkle : vérification des mises à jour une fois par jour.
+        _ = UpdateManager.shared
     }
 
     var body: some Scene {
@@ -78,6 +80,12 @@ struct MenuContent: View {
             NSApplication.shared.activate()
         }
         .keyboardShortcut(",")
+
+        Button("Rechercher des mises à jour…") {
+            UpdateManager.shared.checkForUpdates()
+        }
+
+        Divider()
 
         Button("Quitter Swipe") {
             NSApplication.shared.terminate(nil)

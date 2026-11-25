@@ -95,10 +95,38 @@ struct SettingsView: View {
                 .pickerStyle(.radioGroup)
                 .labelsHidden()
             }
+
+            Section("Mises à jour") {
+                Toggle("Rechercher les mises à jour automatiquement", isOn: $autoUpdate)
+                    .onChange(of: autoUpdate) { _, newValue in
+                        UpdateManager.shared.automaticallyChecks = newValue
+                    }
+                HStack {
+                    Text("Version \(Self.version)")
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Rechercher maintenant…") {
+                        UpdateManager.shared.checkForUpdates()
+                    }
+                }
+            }
         }
         .formStyle(.grouped)
         .frame(width: 460)
         .fixedSize()
-        .onAppear { launchAtLogin.refresh() }
+        .onAppear {
+            launchAtLogin.refresh()
+            autoUpdate = UpdateManager.shared.automaticallyChecks
+        }
+    }
+
+    @State private var autoUpdate = true
+
+    /// Version affichée, par exemple « 1.0 (1) ».
+    private static var version: String {
+        let info = Bundle.main.infoDictionary
+        let short = info?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = info?["CFBundleVersion"] as? String ?? "?"
+        return "\(short) (\(build))"
     }
 }
