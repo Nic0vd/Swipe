@@ -9,3 +9,6 @@ DerivedData/
 # Fichiers système et outils
 .DS_Store
 .claude/
+
+# Notes de travail de Claude (consignes et journal) : gardées sur le Mac, pas sur GitHub
+CLAUDE.md

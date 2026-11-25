@@ -40,4 +40,4 @@ Swipe vit dans la barre des menus (icône en forme de main). Les mises à jour s
 
 ## Pour les curieux
 
-App SwiftUI pour la barre des menus. Elle écoute les défilements du trackpad (`CGEventTap`) et déplace les fenêtres via l'API d'accessibilité de macOS. Les choix de conception sont expliqués dans [CLAUDE.md](CLAUDE.md).
+App SwiftUI pour la barre des menus. Elle écoute les défilements du trackpad (`CGEventTap`) et déplace les fenêtres via l'API d'accessibilité de macOS.

@@ -40,4 +40,4 @@ Swipe lives in the menu bar (hand icon). Later updates install themselves, thank
 
 ## Under the hood
 
-A SwiftUI menu bar app. It listens to trackpad scroll events (`CGEventTap`) and moves windows through the macOS Accessibility API. Design decisions are documented (in French) in [CLAUDE.md](CLAUDE.md).
+A SwiftUI menu bar app. It listens to trackpad scroll events (`CGEventTap`) and moves windows through the macOS Accessibility API.
