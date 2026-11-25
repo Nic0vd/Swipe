@@ -6,6 +6,10 @@
 
 Range tes fenêtres macOS avec un **swipe à deux doigts sur la barre de titre**.
 
+<p align="center">
+  <img src="Design/demo.gif" width="640" alt="Animation : deux doigts glissent sur le trackpad et la fenêtre se range à gauche, à droite, en plein écran, dans un coin, se réduit, passe en plein écran macOS puis se ferme d'un pincement">
+</p>
+
 | Swipe sur la barre de titre | Résultat |
 |---|---|
 | ← / → | moitié gauche / droite de l'écran |
