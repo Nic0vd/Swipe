@@ -298,6 +298,7 @@ final class GestureMonitor {
                 } else {
                     ActionBadge.shared.hide()
                 }
+                Haptics.tick()
                 log("   pincement \(String(format: "%.2f", pinchTotal)) : \(armed ? "la fenêtre sera fermée" : "rien")")
             }
         } else if ns.phase.contains(.ended) {
@@ -352,7 +353,10 @@ final class GestureMonitor {
             // L'aperçu apparaît quand on dépasse le seuil, puis reste actif
             // jusqu'au lâcher, même si les doigts repassent par le point de départ.
             if direction != nil { previewActive = true }
-            if previewActive { showPreview(for: action(for: direction)) }
+            if previewActive {
+                showPreview(for: action(for: direction))
+                Haptics.tick()      // un « tic » à chaque changement de zone
+            }
         }
     }
 
@@ -383,7 +387,7 @@ final class GestureMonitor {
         case .zone(let zone):
             // Ranger : la fenêtre en direct et/ou rectangle et/ou vignette.
             ActionBadge.shared.hide()
-            let frame = ZoneCalculator.frame(for: zone, in: area)
+            let frame = ZoneCalculator.frame(for: zone, in: area, gap: WindowGap.current)
             if mode.movesWindowLive { scheduleLiveMove(to: zone, window: window) }
             showFramePreviews(frame, in: area)
 

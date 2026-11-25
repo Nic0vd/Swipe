@@ -11,6 +11,7 @@
 //
 
 import CoreGraphics
+import Foundation
 
 /// Les zones où l'on peut ranger une fenêtre.
 enum Zone: CaseIterable {
@@ -23,11 +24,41 @@ enum Zone: CaseIterable {
     case bottomRight  // quart en bas à droite
 }
 
+/// Les marges autour des fenêtres rangées, réglables dans les Réglages.
+enum WindowGap {
+    static let key = "windowGap"
+    static let range: ClosedRange<Double> = 0...24
+
+    /// En points ; 0 par défaut (les fenêtres touchent les bords).
+    static var current: CGFloat {
+        let saved = UserDefaults.standard.object(forKey: key) as? Double ?? 0
+        return CGFloat(min(max(saved, range.lowerBound), range.upperBound))
+    }
+}
+
 enum ZoneCalculator {
 
     /// Rectangle cible d'une zone, en coordonnées « écran » de macOS
     /// (origine en bas à gauche, comme `NSScreen.visibleFrame`).
-    static func frame(for zone: Zone, in visible: CGRect) -> CGRect {
+    ///
+    /// `gap` : marge en points. Elle s'applique tout autour de l'écran, et
+    /// entre deux fenêtres voisines (la moitié de chaque côté, pour que
+    /// l'espace entre deux moitiés soit aussi égal à `gap`).
+    static func frame(for zone: Zone, in visible: CGRect, gap: CGFloat = 0) -> CGRect {
+        guard gap > 0 else { return rawFrame(for: zone, in: visible) }
+        let area = visible.insetBy(dx: gap, dy: gap)
+        var f = rawFrame(for: zone, in: area)
+        let half = gap / 2
+        // Bords intérieurs (qui ne touchent pas le bord de l'écran) : demi-marge.
+        if f.minX > area.minX + 0.5 { f.origin.x += half; f.size.width -= half }
+        if f.maxX < area.maxX - 0.5 { f.size.width -= half }
+        if f.minY > area.minY + 0.5 { f.origin.y += half; f.size.height -= half }
+        if f.maxY < area.maxY - 0.5 { f.size.height -= half }
+        return f
+    }
+
+    /// Le rectangle sans aucune marge.
+    private static func rawFrame(for zone: Zone, in visible: CGRect) -> CGRect {
         let halfWidth = (visible.width / 2).rounded(.down)
         // Attention : en coordonnées NSScreen, le « haut » a les y les plus grands.
         let bottomHeight = (visible.height / 2).rounded(.down)

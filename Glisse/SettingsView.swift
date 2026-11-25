@@ -31,22 +31,22 @@ enum PreviewMode: String, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .live:     return "La fenêtre se déplace en direct"
-        case .liveMini: return "En direct + vignette à côté du curseur"
-        case .large:    return "Grand rectangle sur l'écran (déplacement au lâcher)"
-        case .mini:     return "Vignette à côté du curseur (déplacement au lâcher)"
-        case .both:     return "Grand rectangle + vignette (déplacement au lâcher)"
+        case .live:     return String(localized: "La fenêtre se déplace en direct")
+        case .liveMini: return String(localized: "En direct + vignette à côté du curseur")
+        case .large:    return String(localized: "Grand rectangle sur l'écran (déplacement au lâcher)")
+        case .mini:     return String(localized: "Vignette à côté du curseur (déplacement au lâcher)")
+        case .both:     return String(localized: "Grand rectangle + vignette (déplacement au lâcher)")
         }
     }
 
     /// Nom court, sous chaque vignette des Réglages.
     var shortLabel: String {
         switch self {
-        case .live:     return "En direct"
-        case .liveMini: return "En direct + vignette"
-        case .large:    return "Grand rectangle"
-        case .mini:     return "Vignette"
-        case .both:     return "Rectangle + vignette"
+        case .live:     return String(localized: "En direct")
+        case .liveMini: return String(localized: "En direct + vignette")
+        case .large:    return String(localized: "Grand rectangle")
+        case .mini:     return String(localized: "Vignette")
+        case .both:     return String(localized: "Rectangle + vignette")
         }
     }
 
@@ -78,6 +78,9 @@ struct SettingsView: View {
     @AppStorage("enabled") private var isEnabled = true
     @AppStorage(PreviewMode.storageKey) private var previewMode: PreviewMode = PreviewMode.defaultMode
     @AppStorage(GestureMonitor.thresholdKey) private var threshold: Double = GestureMonitor.defaultThreshold
+    @AppStorage(Haptics.enabledKey) private var hapticsEnabled = true
+    @AppStorage(Haptics.strengthKey) private var hapticStrength: HapticStrength = .medium
+    @AppStorage(WindowGap.key) private var gap: Double = 0
 
     private let launchAtLogin = LaunchAtLogin.shared
 
@@ -132,6 +135,45 @@ struct SettingsView: View {
                 Text("Distance à parcourir avec les doigts : \(Int(threshold)) points")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+            }
+
+            Section("Retour haptique") {
+                Toggle("Petit « tic » dans le trackpad quand la zone change", isOn: $hapticsEnabled)
+                Picker("Force", selection: $hapticStrength) {
+                    ForEach(HapticStrength.allCases) { strength in
+                        Text(strength.label).tag(strength)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .disabled(!hapticsEnabled)
+                HStack {
+                    Text("Avec un trackpad Force Touch.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Essayer") { Haptics.tick() }
+                        .disabled(!hapticsEnabled)
+                }
+            }
+
+            Section("Marges") {
+                Slider(value: $gap, in: WindowGap.range, step: 2) {
+                    Text("Marges")
+                } minimumValueLabel: {
+                    Text("Aucune")
+                } maximumValueLabel: {
+                    Text("Larges")
+                }
+                .labelsHidden()
+                Group {
+                    if gap == 0 {
+                        Text("Les fenêtres rangées touchent les bords de l'écran.")
+                    } else {
+                        Text("\(Int(gap)) points autour des fenêtres rangées et entre elles.")
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
             }
 
             Section {

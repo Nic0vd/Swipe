@@ -34,7 +34,7 @@ enum WindowManager {
         let screen = screenContaining(cocoaFrame)
 
         // 2. Où doit-elle aller ? (calcul en NSScreen, puis conversion en AX)
-        let target = ZoneCalculator.frame(for: zone, in: screen.visibleFrame)
+        let target = ZoneCalculator.frame(for: zone, in: screen.visibleFrame, gap: WindowGap.current)
         let axTarget = ZoneCalculator.flipped(target, primaryHeight: primaryHeight)
 
         // 3. On y va, en douceur.

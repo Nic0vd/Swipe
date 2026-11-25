@@ -1,0 +1,1382 @@
+{
+  "sourceLanguage": "fr",
+  "strings": {
+    "%lld points autour des fenêtres rangées et entre elles.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld points around and between snapped windows."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld points autour des fenêtres rangées et entre elles."
+          }
+        }
+      }
+    },
+    "Accessibilité : autorisée ✅": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accessibility: allowed ✅"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accessibilité : autorisée ✅"
+          }
+        }
+      }
+    },
+    "Accessibilité : non autorisée ⚠️": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accessibility: not allowed ⚠️"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accessibilité : non autorisée ⚠️"
+          }
+        }
+      }
+    },
+    "Activer Swipe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable Swipe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer Swipe"
+          }
+        }
+      }
+    },
+    "Activé": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enabled"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activé"
+          }
+        }
+      }
+    },
+    "Animation : %@, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Animation: %1$@, %2$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Animation : %@, %@"
+          }
+        }
+      }
+    },
+    "Aperçu pendant le swipe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview while swiping"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu pendant le swipe"
+          }
+        }
+      }
+    },
+    "Appui puis ↑": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold, then ↑"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appui puis ↑"
+          }
+        }
+      }
+    },
+    "Astuces": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tips"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Astuces"
+          }
+        }
+      }
+    },
+    "Aucune": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune"
+          }
+        }
+      }
+    },
+    "Avec un trackpad Force Touch.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requires a Force Touch trackpad."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avec un trackpad Force Touch."
+          }
+        }
+      }
+    },
+    "Conseil : place Swipe dans le dossier Applications avant de cocher cette case.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tip: move Swipe to the Applications folder before checking this box."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conseil : place Swipe dans le dossier Applications avant de cocher cette case."
+          }
+        }
+      }
+    },
+    "Demander l'autorisation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Request Permission"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demander l'autorisation"
+          }
+        }
+      }
+    },
+    "Distance à parcourir avec les doigts : %lld points": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finger travel needed: %lld points"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distance à parcourir avec les doigts : %lld points"
+          }
+        }
+      }
+    },
+    "En diagonale : la fenêtre se range dans le coin correspondant. Le geste doit être un peu plus franc que pour les moitiés.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagonally: the window snaps to that corner. The swipe needs to be a little more decisive than for halves."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En diagonale : la fenêtre se range dans le coin correspondant. Le geste doit être un peu plus franc que pour les moitiés."
+          }
+        }
+      }
+    },
+    "En direct": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En direct"
+          }
+        }
+      }
+    },
+    "En direct + vignette": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live + thumbnail"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En direct + vignette"
+          }
+        }
+      }
+    },
+    "En direct + vignette à côté du curseur": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live + thumbnail next to the pointer"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En direct + vignette à côté du curseur"
+          }
+        }
+      }
+    },
+    "Enchaîne les gestes sans bouger la souris : Swipe garde la même fenêtre.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chain gestures without moving the pointer: Swipe keeps the same window."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enchaîne les gestes sans bouger la souris : Swipe garde la même fenêtre."
+          }
+        }
+      }
+    },
+    "Essayer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essayer"
+          }
+        }
+      }
+    },
+    "Fermer la fenêtre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close the window"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer la fenêtre"
+          }
+        }
+      }
+    },
+    "Force": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strength"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Force"
+          }
+        }
+      }
+    },
+    "Fort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strong"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fort"
+          }
+        }
+      }
+    },
+    "Garde les deux doigts posés un court instant sans bouger, puis glisse vers le haut : bouton vert, plein écran macOS. Le même geste en ressort.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest two fingers for a brief moment without moving, then swipe up: green button, macOS full screen. The same gesture exits it."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garde les deux doigts posés un court instant sans bouger, puis glisse vers le haut : bouton vert, plein écran macOS. Le même geste en ressort."
+          }
+        }
+      }
+    },
+    "Gestes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestures"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestes"
+          }
+        }
+      }
+    },
+    "Grand rectangle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large rectangle"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grand rectangle"
+          }
+        }
+      }
+    },
+    "Grand rectangle + vignette (déplacement au lâcher)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large rectangle + thumbnail (moves on release)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grand rectangle + vignette (déplacement au lâcher)"
+          }
+        }
+      }
+    },
+    "Grand rectangle sur l'écran (déplacement au lâcher)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large rectangle on screen (moves on release)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grand rectangle sur l'écran (déplacement au lâcher)"
+          }
+        }
+      }
+    },
+    "Général": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Général"
+          }
+        }
+      }
+    },
+    "La fenêtre se déplace en direct": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The window moves live"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fenêtre se déplace en direct"
+          }
+        }
+      }
+    },
+    "Lancer Swipe au démarrage du Mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launch Swipe at login"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lancer Swipe au démarrage du Mac"
+          }
+        }
+      }
+    },
+    "Larges": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wide"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Larges"
+          }
+        }
+      }
+    },
+    "Le projet sur GitHub": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project on GitHub"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le projet sur GitHub"
+          }
+        }
+      }
+    },
+    "Les fenêtres rangées touchent les bords de l'écran.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snapped windows touch the screen edges."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les fenêtres rangées touchent les bords de l'écran."
+          }
+        }
+      }
+    },
+    "Léger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Léger"
+          }
+        }
+      }
+    },
+    "Marges": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Margins"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marges"
+          }
+        }
+      }
+    },
+    "Mises à jour": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updates"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mises à jour"
+          }
+        }
+      }
+    },
+    "Mises à jour automatiques grâce à Sparkle.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic updates powered by Sparkle."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mises à jour automatiques grâce à Sparkle."
+          }
+        }
+      }
+    },
+    "Moitié droite": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right half"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moitié droite"
+          }
+        }
+      }
+    },
+    "Moitié gauche": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left half"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moitié gauche"
+          }
+        }
+      }
+    },
+    "Montrer Swipe dans le Finder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Swipe in Finder"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Montrer Swipe dans le Finder"
+          }
+        }
+      }
+    },
+    "Moyen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medium"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moyen"
+          }
+        }
+      }
+    },
+    "Même geste vers la droite : la fenêtre occupe la moitié droite.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same gesture to the right: the window fills the right half."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Même geste vers la droite : la fenêtre occupe la moitié droite."
+          }
+        }
+      }
+    },
+    "Notes de version et téléchargements": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Release notes and downloads"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes de version et téléchargements"
+          }
+        }
+      }
+    },
+    "Ouvrir les Réglages…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open System Settings…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir les Réglages…"
+          }
+        }
+      }
+    },
+    "Petit « tic » dans le trackpad quand la zone change": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Small “tick” in the trackpad when the zone changes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Petit « tic » dans le trackpad quand la zone change"
+          }
+        }
+      }
+    },
+    "Peu sensible": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Less sensitive"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peu sensible"
+          }
+        }
+      }
+    },
+    "Pincer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pinch"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pincer"
+          }
+        }
+      }
+    },
+    "Plein écran": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full screen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plein écran"
+          }
+        }
+      }
+    },
+    "Pose deux doigts, le curseur sur la barre de titre, et glisse vers la gauche : la fenêtre occupe la moitié gauche de l'écran.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With the pointer on the title bar, put two fingers down and swipe left: the window fills the left half of the screen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pose deux doigts, le curseur sur la barre de titre, et glisse vers la gauche : la fenêtre occupe la moitié gauche de l'écran."
+          }
+        }
+      }
+    },
+    "Pour annuler, ramène tes doigts près du point de départ avant de les lever.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To cancel, bring your fingers back near where you started before lifting them."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour annuler, ramène tes doigts près du point de départ avant de les lever."
+          }
+        }
+      }
+    },
+    "Projet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Projet"
+          }
+        }
+      }
+    },
+    "Quart d'écran": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quarter of the screen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quart d'écran"
+          }
+        }
+      }
+    },
+    "Quitter Swipe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit Swipe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitter Swipe"
+          }
+        }
+      }
+    },
+    "Range tes fenêtres avec un swipe à deux doigts sur la barre de titre.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrange your windows with a two-finger swipe on the title bar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Range tes fenêtres avec un swipe à deux doigts sur la barre de titre."
+          }
+        }
+      }
+    },
+    "Rapproche deux doigts comme pour dézoomer : un bouton rouge apparaît, et la fenêtre se ferme quand tu lèves les doigts.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pinch two fingers together as if zooming out: a red button appears, and the window closes when you lift your fingers."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapproche deux doigts comme pour dézoomer : un bouton rouge apparaît, et la fenêtre se ferme quand tu lèves les doigts."
+          }
+        }
+      }
+    },
+    "Rechercher des mises à jour…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check for Updates…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher des mises à jour…"
+          }
+        }
+      }
+    },
+    "Rechercher les mises à jour automatiquement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatically check for updates"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher les mises à jour automatiquement"
+          }
+        }
+      }
+    },
+    "Rechercher maintenant…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check Now…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher maintenant…"
+          }
+        }
+      }
+    },
+    "Rectangle + vignette": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rectangle + thumbnail"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rectangle + vignette"
+          }
+        }
+      }
+    },
+    "Remplir l'écran": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fill the screen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remplir l'écran"
+          }
+        }
+      }
+    },
+    "Retour haptique": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haptic feedback"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retour haptique"
+          }
+        }
+      }
+    },
+    "Réduire dans le Dock": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minimize to Dock"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réduire dans le Dock"
+          }
+        }
+      }
+    },
+    "Réglages": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages"
+          }
+        }
+      }
+    },
+    "Réglages de Swipe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe Settings"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages de Swipe"
+          }
+        }
+      }
+    },
+    "Réglages…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages…"
+          }
+        }
+      }
+    },
+    "Sensibilité": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensitivity"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensibilité"
+          }
+        }
+      }
+    },
+    "Swipe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe"
+          }
+        }
+      }
+    },
+    "Swipe %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe %@"
+          }
+        }
+      }
+    },
+    "Swipe vérifie une fois par jour s'il existe une nouvelle version.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe checks once a day for a new version."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe vérifie une fois par jour s'il existe une nouvelle version."
+          }
+        }
+      }
+    },
+    "Tant que tes doigts sont posés, tu peux changer d'avis : la fenêtre suit.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As long as your fingers are down, you can change your mind: the window follows."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tant que tes doigts sont posés, tu peux changer d'avis : la fenêtre suit."
+          }
+        }
+      }
+    },
+    "Tous les gestes se font avec **deux doigts sur le trackpad**, le curseur posé sur la **barre de titre** d'une fenêtre. Partout ailleurs, le défilement marche normalement.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every gesture uses **two fingers on the trackpad**, with the pointer on a window's **title bar**. Everywhere else, scrolling works as usual."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les gestes se font avec **deux doigts sur le trackpad**, le curseur posé sur la **barre de titre** d'une fenêtre. Partout ailleurs, le défilement marche normalement."
+          }
+        }
+      }
+    },
+    "Très sensible": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Very sensitive"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Très sensible"
+          }
+        }
+      }
+    },
+    "Vers le bas, franchement : un bouton jaune apparaît, et la fenêtre part dans le Dock quand tu lèves les doigts.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe down decisively: a yellow button appears, and the window goes to the Dock when you lift your fingers."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vers le bas, franchement : un bouton jaune apparaît, et la fenêtre part dans le Dock quand tu lèves les doigts."
+          }
+        }
+      }
+    },
+    "Vers le haut : la fenêtre remplit tout l'écran, en laissant visibles la barre des menus et le Dock.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe up: the window fills the whole screen, leaving the menu bar and Dock visible."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vers le haut : la fenêtre remplit tout l'écran, en laissant visibles la barre des menus et le Dock."
+          }
+        }
+      }
+    },
+    "Version %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version %@"
+          }
+        }
+      }
+    },
+    "Vignette": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thumbnail"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vignette"
+          }
+        }
+      }
+    },
+    "Vignette à côté du curseur (déplacement au lâcher)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thumbnail next to the pointer (moves on release)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vignette à côté du curseur (déplacement au lâcher)"
+          }
+        }
+      }
+    },
+    "« En direct » : la fenêtre suit tes doigts. Les autres modes la déplacent quand tu lèves les doigts.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Live”: the window follows your fingers. The other modes move it when you lift your fingers."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "« En direct » : la fenêtre suit tes doigts. Les autres modes la déplacent quand tu lèves les doigts."
+          }
+        }
+      }
+    },
+    "À autoriser dans Réglages Système → Général → Ouverture.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow it in System Settings → General → Login Items."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À autoriser dans Réglages Système → Général → Ouverture."
+          }
+        }
+      }
+    },
+    "À propos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À propos"
+          }
+        }
+      }
+    },
+    "←": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "←"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "←"
+          }
+        }
+      }
+    },
+    "↑": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑"
+          }
+        }
+      }
+    },
+    "→": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "→"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "→"
+          }
+        }
+      }
+    },
+    "↓": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↓"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↓"
+          }
+        }
+      }
+    },
+    "↖ ↗ ↙ ↘": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↖ ↗ ↙ ↘"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↖ ↗ ↙ ↘"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
