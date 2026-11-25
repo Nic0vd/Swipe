@@ -32,7 +32,7 @@ Réglages : lancement au démarrage, sensibilité du geste, choix de l'aperçu, 
 
 Swipe vit dans la barre des menus (icône en forme de main). Les mises à jour suivantes s'installent toutes seules, avec [Sparkle](https://sparkle-project.org).
 
-**Configuration requise** : macOS 27.2 ou plus récent, et un trackpad.
+**Configuration requise** : macOS 15 (Sequoia) ou plus récent, et un trackpad. Swipe est disponible en français et en anglais.
 
 ## Pour les curieux
 
